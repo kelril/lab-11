@@ -21,7 +21,7 @@ void build(int argc, char* argv[]) {
     }
     else {
         std::string config = "Debug";
-        time_t timeout =  time_now();;
+        time_t timeout =  time_now();
         time_t time_spent = 0;
         if (vm.count("timeout")) {
             timeout = vm["timeout"].as<time_t>();
@@ -31,11 +31,11 @@ void build(int argc, char* argv[]) {
             config = vm["config"].as<std::string>();
         }
 
-        std::string command_1 = "sudo cmake -H. -B_build -DCMAKE_INSTALL_" +
+        std::string command_1 = "cmake -H. -B_build -DCMAKE_INSTALL_" +
                              std::string("PREFIX=_install -DCMAKE_BUILD_TYPE=");
-        std::string command_2 = "sudo cmake --build _build";
-        std::string command_3 = "sudo cmake --build _build --target install";
-        std::string command_4 = "sudo cmake --build _build --target package";
+        std::string command_2 = "cmake --build _build";
+        std::string command_3 = "cmake --build _build --target install";
+        std::string command_4 = "cmake --build _build --target package";
 
         if (config == "Debug" || config == "Release") {
             int res_1 = 0;
