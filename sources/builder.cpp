@@ -21,7 +21,7 @@ void build(int argc, char* argv[]) {
     }
     else {
         std::string config = "Debug";
-        time_t timeout = 0;
+        time_t timeout =  time_now();;
         time_t time_spent = 0;
         if (vm.count("timeout")) {
             timeout = vm["timeout"].as<time_t>();
@@ -44,22 +44,16 @@ void build(int argc, char* argv[]) {
 
             auto t1 = async::spawn([&res_1, config, timeout, &time_spent,
                                     command_1, command_2] () mutable {
-                time_t start_1 = std::chrono::system_clock::to_time_t(
-                    std::chrono::system_clock::now()
-                );
+                time_t start_1 = time_now();
 
                 create_child(command_1, timeout);
-                time_t end_1 = std::chrono::system_clock::to_time_t(
-                    std::chrono::system_clock::now()
-                );
+                time_t end_1 = time_now();
 
                 time_spent += end_1 - start_1;
-                std::cerr << "\n" << "time spent -" << time_spent << "\n";
+
                 time_t period_2 = timeout - time_spent;
                 create_child(command_2, period_2, res_1);
-                time_t end_2 = std::chrono::system_clock::to_time_t(
-                    std::chrono::system_clock::now()
-                );
+                time_t end_2 = time_now();
 
                 time_spent += end_2 - end_1;
             });
@@ -69,13 +63,10 @@ void build(int argc, char* argv[]) {
                                             timeout, &time_spent] () mutable {
 
                     time_t period_3 = timeout - time_spent;
-                    time_t start_3 = std::chrono::system_clock::to_time_t(
-                        std::chrono::system_clock::now()
-                    );
+                    time_t start_3 = time_now();
+
                     create_child(command_3, period_3, res_2);
-                    time_t end_3 = std::chrono::system_clock::to_time_t(
-                        std::chrono::system_clock::now()
-                    );
+                    time_t end_3 = time_now();
 
                     time_spent += end_3 - start_3;
                 });
@@ -106,8 +97,6 @@ void create_child(const std::string& command, const time_t& period) {
     while (out && std::getline(out, line) && !line.empty())
         std::cerr << line << std::endl;
 
-    process.wait();
-
     checkTime.join();
 }
 
@@ -122,27 +111,29 @@ void create_child(const std::string& command, const time_t& period, int& res) {
     while (out && std::getline(out, line) && !line.empty())
         std::cerr << line << std::endl;
 
-    process.wait();
-
     checkTime.join();
 
     res = process.exit_code();
 }
 
 void check_time(child& process, const time_t& period) {
-    time_t start =  std::chrono::system_clock::to_time_t(
-        std::chrono::system_clock::now()
-    );
+    time_t start = time_now();
 
     while (true) {
-        if ((std::chrono::system_clock::to_time_t(
-                    std::chrono::system_clock::now()) - start > period)
-                                                        && process.running()) {
-            process.terminate();
+        if ((time_now() - start > period) && process.running()) {
+            std::error_code ec;
+            process.terminate(ec);
+            std::cout << ec;
             break;
         }
         else if (!process.running()) {
             break;
         }
     }
+}
+
+time_t time_now() {
+    return std::chrono::system_clock::to_time_t(
+            std::chrono::system_clock::now()
+            );
 }

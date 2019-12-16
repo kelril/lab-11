@@ -5,6 +5,7 @@
 #include <boost/program_options.hpp>
 #include <vector>
 #include <iostream>
+#include <signal.h>
 #include <string>
 #include <thread>
 #include <chrono>
@@ -21,3 +22,5 @@ void create_child(const std::string& command, const time_t& period);
 void create_child(const std::string& command, const time_t& period, int& res);
 
 void check_time(child& process, const time_t& period);
+
+time_t time_now();
