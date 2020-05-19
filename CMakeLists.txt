@@ -42,9 +42,7 @@ add_executable(tests
 # TODO: enum your files and delete this comment
 ${CMAKE_CURRENT_SOURCE_DIR}/tests/test.cpp
 )
-add_executable(main
-  ${CMAKE_CURRENT_SOURCE_DIR}/sources/main.cpp
-)
+
 
 
 
@@ -56,7 +54,7 @@ target_include_directories(tests
         PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
         )
 # TODO: change template word to project name and delete this comment
-target_link_libraries(tests GTest::main builder)
+target_link_libraries(tests GTest:: builder)
 
 
 target_include_directories(process
@@ -69,7 +67,7 @@ target_include_directories(builder
 target_link_libraries(builder process Async++::Async++
             Boost::program_options Boost::filesystem Boost::system Boost::regex)
 
-target_link_libraries(main builder)
+target_link_libraries(builder)
 
 enable_testing()
 add_test(NAME unit_tests COMMAND tests)
