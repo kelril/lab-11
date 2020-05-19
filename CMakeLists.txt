@@ -48,7 +48,7 @@ add_executable(main
 
 
 
- TODO: change template word to project name and delete this comment
+# TODO: change template word to project name and delete this comment
 target_include_directories(builder
         PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
         )
