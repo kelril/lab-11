@@ -32,6 +32,9 @@ add_library(builder STATIC
 )
 add_library(process INTERFACE
 )
+add_executable(main
+  ${CMAKE_CURRENT_SOURCE_DIR}/sources/main.cpp
+)
 
 target_include_directories(process
   INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/process/include
@@ -43,4 +46,4 @@ target_include_directories(builder
 target_link_libraries(builder process Async++::Async++
             Boost::program_options Boost::filesystem Boost::system Boost::regex)
 
-target_link_libraries(builder)
+target_link_libraries(main builder)
