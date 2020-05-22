@@ -1,5 +1,6 @@
 // Copyright 2018 Your Name <your_email>
 #include "builder.hpp"
+#include <constants.hpp>
 
 void build(int argc, char* argv[]) {
 
@@ -31,12 +32,6 @@ void build(int argc, char* argv[]) {
         if (vm.count("config")) {
             config = vm["config"].as<std::string>();
         }
-
-        std::string command_1 = "cmake -H. -B_build -DCMAKE_INSTALL_" +
-                             std::string("PREFIX=_install -DCMAKE_BUILD_TYPE=");
-        std::string command_2 = "cmake --build _build";
-        std::string command_3 = "cmake --build _build --target install";
-        std::string command_4 = "cmake --build _build --target package";
 
         if (config == "Debug" || config == "Release") {
             int res_1 = 0;
